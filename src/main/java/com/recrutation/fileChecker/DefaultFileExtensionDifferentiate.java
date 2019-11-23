@@ -18,8 +18,11 @@ public class DefaultFileExtensionDifferentiate implements FileExtensionDifferent
     }
 
     @Override
-    public boolean isFileExtensionValid(FileModel fileModel) {
+    public boolean isFileExtensionValid(FileModel fileModel) throws FileExtensionIsNotSupported {
         String extension = fileModel.getExtension();
+        if (isExtensionNotTxtAndNotInMagicNumberKeys(extension)) {
+            throw new FileExtensionIsNotSupported(extension + " is not supported");
+        }
         String hexValuesString = getHexValuesStringToCompare(fileModel, extension);
         for (String magicNumber : magicNumbers.get(extension)) {
             if (magicNumber.equals(hexValuesString)) {
@@ -28,6 +31,10 @@ public class DefaultFileExtensionDifferentiate implements FileExtensionDifferent
         }
 
         return false;
+    }
+
+    private boolean isExtensionNotTxtAndNotInMagicNumberKeys(String extension) {
+        return !extension.equals("txt") && !magicNumbers.keySet().contains(extension);
     }
 
     private String getHexValuesStringToCompare(FileModel fileModel, String extension) {

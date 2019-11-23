@@ -3,6 +3,7 @@ package com.recrutation.service;
 import com.recrutation.display.View;
 import com.recrutation.fileChecker.DefaultFileExtensionDifferentiate;
 import com.recrutation.fileChecker.FileExtensionDifferentiate;
+import com.recrutation.fileChecker.FileExtensionIsNotSupported;
 import com.recrutation.model.FileModel;
 
 import java.io.IOException;
@@ -44,7 +45,12 @@ public class Service {
     public void checkFileExtension() {
         extensionDifferentiate = new DefaultFileExtensionDifferentiate();
         for (FileModel fileModel: files) {
-            boolean isFileExtensionCorrect = extensionDifferentiate.isFileExtensionValid(fileModel);
+            boolean isFileExtensionCorrect = false;
+            try {
+                isFileExtensionCorrect = extensionDifferentiate.isFileExtensionValid(fileModel);
+            } catch (FileExtensionIsNotSupported fileExtensionIsNotSupported) {
+                fileExtensionIsNotSupported.printStackTrace();
+            }
             fileModel.setExtensionValid(isFileExtensionCorrect);
         }
     }
