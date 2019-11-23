@@ -8,7 +8,7 @@ public class App {
     public static void main( String[] args ) {
 
         View view = new View();
-        if (args != null) {
+        if (args.length != 0) {
             Service service = new Service(args);
         } else {
             view.showProvideFilePathMessage();
