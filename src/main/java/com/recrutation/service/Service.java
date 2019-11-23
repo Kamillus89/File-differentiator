@@ -25,19 +25,16 @@ public class Service {
     }
 
     public void readBytesOfAllFiles() {
-        FileModel fileModel;
         Path path;
         for (String filePath : filePaths) {
             try {
                 path = Paths.get(filePath);
-                fileModel = new FileModel();
-                fileModel.setName(path.getFileName().toString());
-                fileModel.setBytes(Files.readAllBytes(path));
-                files.put(fileModel.getName(), fileModel);
+                String fileModelName = path.getFileName().toString();
+                files.put(fileModelName, new FileModel(fileModelName,Files.readAllBytes(path)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-    
+
 }
