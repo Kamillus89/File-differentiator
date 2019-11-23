@@ -42,6 +42,20 @@ public class DefaultFileExtensionDifferentiate implements FileExtensionDifferent
         return false;
     }
 
+    @Override
+    public String findSuggestionOfExtension(FileModel fileModel) {
+        String suggestedExtension = "It could be TXT or it's not supported";
+        for (String extension : magicNumbers.keySet()) {
+            String hexValuesString = getHexValuesStringToCompare(fileModel, extension);
+            for (String magicNumber : magicNumbers.get(extension)) {
+                if (magicNumber.equals(hexValuesString)) {
+                    suggestedExtension = extension;
+                }
+            }
+        }
+        return suggestedExtension;
+    }
+
     private boolean checkIfFileIsNotOtherSupportedExtension(FileModel fileModel) {
         String hexValueString;
         for (String key : magicNumbers.keySet()) {

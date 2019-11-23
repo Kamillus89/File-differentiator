@@ -9,4 +9,6 @@ public interface FileExtensionDifferentiate {
     String[] PDFMAGICNUMBER = new String[]{"[25, 50, 44, 46, 2d]"};
 
     boolean isFileExtensionValid(FileModel fileModel) throws FileExtensionIsNotSupported;
+
+    String findSuggestionOfExtension(FileModel fileModel);
 }

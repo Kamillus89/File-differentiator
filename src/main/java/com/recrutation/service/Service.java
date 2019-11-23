@@ -17,7 +17,8 @@ public class Service {
 
     private String[] filePaths;
     private View view = new View();
-    List<FileModel> files = new ArrayList<>();
+    private List<FileModel> files = new ArrayList<>();
+    private FileExtensionDifferentiate extensionDifferentiate = new DefaultFileExtensionDifferentiate();
 
     public Service(String[] filePaths) {
         this.filePaths = filePaths;
@@ -32,7 +33,7 @@ public class Service {
             try {
                 path = Paths.get(filePath);
                 String fileModelName = path.getFileName().toString();
-                String extension = fileModelName.substring(fileModelName.indexOf('.')+1);
+                String extension = fileModelName.substring(fileModelName.indexOf('.') + 1);
                 byte[] bytes = Files.readAllBytes(path);
                 files.add(new FileModel(fileModelName, bytes, extension));
             } catch (IOException e) {
@@ -42,8 +43,7 @@ public class Service {
     }
 
     public void checkFileExtension() {
-        FileExtensionDifferentiate extensionDifferentiate = new DefaultFileExtensionDifferentiate();
-        for (FileModel fileModel: files) {
+        for (FileModel fileModel : files) {
             boolean isFileExtensionCorrect = false;
             try {
                 isFileExtensionCorrect = extensionDifferentiate.isFileExtensionValid(fileModel);
@@ -55,7 +55,12 @@ public class Service {
     }
 
     public void showFileInformation() {
-        files.forEach(fileModel -> view.showFileInfo(fileModel));
+        for (FileModel fileModel: files) {
+            view.showFileInfo(fileModel);
+            if (!fileModel.isExtensionValid()) {
+                view.showSuggestedExtension(extensionDifferentiate.findSuggestionOfExtension(fileModel));
+            }
+        }
     }
 
 }
