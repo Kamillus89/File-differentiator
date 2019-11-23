@@ -10,18 +10,25 @@ import java.util.Map;
 public class DefaultFileExtensionDifferentiate implements FileExtensionDifferentiate {
 
     private Map<String, String[]> magicNumbers;
+    private Map<String, Integer> bytesAmountLimitMap;
 
     public DefaultFileExtensionDifferentiate() {
         this.magicNumbers = new HashMap<>();
         this.magicNumbers.put("jpg", FileExtensionDifferentiate.JPGMAGICNUMBER);
         this.magicNumbers.put("gif", FileExtensionDifferentiate.GIFMAGICNUMBER);
+        this.magicNumbers.put("pdf", FileExtensionDifferentiate.PDFMAGICNUMBER);
+
+        this.bytesAmountLimitMap = new HashMap<>();
+        this.bytesAmountLimitMap.put("jpg", 3);
+        this.bytesAmountLimitMap.put("gif", 6);
+        this.bytesAmountLimitMap.put("pdf", 5);
     }
 
     @Override
     public boolean isFileExtensionValid(FileModel fileModel) throws FileExtensionIsNotSupported {
         String extension = fileModel.getExtension();
         if (isExtensionNotTxtAndNotInMagicNumberKeys(extension)) {
-            throw new FileExtensionIsNotSupported(extension + " is not supported");
+            throw new FileExtensionIsNotSupported(extension + " extension is not supported");
         }
         if (extension.equals("txt")) {
             return !checkIfFileIsNotOtherSupportedExtension(fileModel);
@@ -72,17 +79,8 @@ public class DefaultFileExtensionDifferentiate implements FileExtensionDifferent
     }
 
     private int getBytesAmountLimit(String extension) {
-        int bytesAmountLimit = 0;
-        if (extension.equals("jpg")) {
-            bytesAmountLimit = 3;
-        }
-        if (extension.equals("gif")) {
-            bytesAmountLimit = 6;
-        }
-        if (extension.equals("txt")) {
-            bytesAmountLimit = 6;
-        }
-        return bytesAmountLimit;
+        return bytesAmountLimitMap.get(extension);
+
     }
 
 

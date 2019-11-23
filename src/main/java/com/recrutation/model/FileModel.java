@@ -32,12 +32,12 @@ public class FileModel {
     @Override
     public String toString() {
         if (isExtensionValid) {
-            return "name='" + name + '\'' +
+            return "File name='" + name + '\'' +
                     ", extension='" + extension + '\'' +
-                    " and this extension is correct! ";
+                    " and this extension is correct ";
         }
-        return "name='" + name + '\'' +
+        return "File name='" + name + '\'' +
                 ", extension='" + extension + '\'' +
-                " and this extension is wrong! ";
+                " and this extension is wrong or not supported! ";
     }
 }

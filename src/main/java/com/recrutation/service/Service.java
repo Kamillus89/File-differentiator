@@ -16,7 +16,6 @@ import java.util.List;
 public class Service {
 
     private String[] filePaths;
-    private FileExtensionDifferentiate extensionDifferentiate = new DefaultFileExtensionDifferentiate();
     private View view = new View();
     List<FileModel> files = new ArrayList<>();
 
@@ -24,7 +23,7 @@ public class Service {
         this.filePaths = filePaths;
         getDataOfAllFiles();
         checkFileExtension();
-        showFileInformations();
+        showFileInformation();
     }
 
     public void getDataOfAllFiles() {
@@ -43,7 +42,7 @@ public class Service {
     }
 
     public void checkFileExtension() {
-        extensionDifferentiate = new DefaultFileExtensionDifferentiate();
+        FileExtensionDifferentiate extensionDifferentiate = new DefaultFileExtensionDifferentiate();
         for (FileModel fileModel: files) {
             boolean isFileExtensionCorrect = false;
             try {
@@ -55,7 +54,7 @@ public class Service {
         }
     }
 
-    public void showFileInformations() {
+    public void showFileInformation() {
         files.forEach(fileModel -> view.showFileInfo(fileModel));
     }
 
