@@ -31,10 +31,13 @@ public class FileModel {
 
     @Override
     public String toString() {
-        return "FileModel{" +
-                "name='" + name + '\'' +
+        if (isExtensionValid) {
+            return "name='" + name + '\'' +
+                    ", extension='" + extension + '\'' +
+                    " and this extension is correct! ";
+        }
+        return "name='" + name + '\'' +
                 ", extension='" + extension + '\'' +
-                ", isExtensionValid=" + isExtensionValid +
-                '}';
+                " and this extension is wrong! ";
     }
 }

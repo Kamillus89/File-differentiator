@@ -23,6 +23,7 @@ public class Service {
         this.filePaths = filePaths;
         getDataOfAllFiles();
         checkFileExtension();
+        showFileInformations();
     }
 
     public void getDataOfAllFiles() {
@@ -46,6 +47,10 @@ public class Service {
             boolean isFileExtensionCorrect = extensionDifferentiate.isFileExtensionValid(fileModel);
             fileModel.setExtensionValid(isFileExtensionCorrect);
         }
+    }
+
+    public void showFileInformations() {
+        files.forEach(fileModel -> view.showFileInfo(fileModel));
     }
 
 }

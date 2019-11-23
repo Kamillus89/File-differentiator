@@ -20,20 +20,7 @@ public class DefaultFileExtensionDifferentiate implements FileExtensionDifferent
     @Override
     public boolean isFileExtensionValid(FileModel fileModel) {
         String extension = fileModel.getExtension();
-        List<String> hexValues = new ArrayList<>();
-        int bytesAmountLimit = 0;
-        if (extension.equals("jpg")) {
-            bytesAmountLimit = 3;
-        }
-        if (extension.equals("gif")) {
-            bytesAmountLimit = 6;
-        }
-        for (byte b: fileModel.getBytes()) {
-            if (hexValues.size() < bytesAmountLimit) {
-                hexValues.add(Integer.toHexString(b));
-            }
-        }
-        String hexValuesString = hexValues.toString();
+        String hexValuesString = getHexValuesStringToCompare(fileModel, extension);
         for (String magicNumber : magicNumbers.get(extension)) {
             if (magicNumber.equals(hexValuesString)) {
                 return true;
@@ -41,6 +28,28 @@ public class DefaultFileExtensionDifferentiate implements FileExtensionDifferent
         }
 
         return false;
+    }
+
+    private String getHexValuesStringToCompare(FileModel fileModel, String extension) {
+        List<String> hexValues = new ArrayList<>();
+        int bytesAmountLimit = getBytesAmountLimit(extension);
+        int i = 0;
+        while (hexValues.size() < bytesAmountLimit) {
+            hexValues.add(Integer.toHexString(fileModel.getBytes()[i]));
+            i++;
+        }
+        return hexValues.toString();
+    }
+
+    private int getBytesAmountLimit(String extension) {
+        int bytesAmountLimit = 0;
+        if (extension.equals("jpg")) {
+            bytesAmountLimit = 3;
+        }
+        if (extension.equals("gif")) {
+            bytesAmountLimit = 6;
+        }
+        return bytesAmountLimit;
     }
 
 
