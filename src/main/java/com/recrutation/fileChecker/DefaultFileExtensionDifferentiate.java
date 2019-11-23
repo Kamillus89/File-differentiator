@@ -23,15 +23,38 @@ public class DefaultFileExtensionDifferentiate implements FileExtensionDifferent
         if (isExtensionNotTxtAndNotInMagicNumberKeys(extension)) {
             throw new FileExtensionIsNotSupported(extension + " is not supported");
         }
+        if (extension.equals("txt")) {
+            return !checkIfFileIsNotOtherSupportedExtension(fileModel);
+        }
         String hexValuesString = getHexValuesStringToCompare(fileModel, extension);
         for (String magicNumber : magicNumbers.get(extension)) {
             if (magicNumber.equals(hexValuesString)) {
                 return true;
             }
         }
-
         return false;
     }
+
+    private boolean checkIfFileIsNotOtherSupportedExtension(FileModel fileModel) {
+        String hexValueString;
+        for (String key : magicNumbers.keySet()) {
+            hexValueString = getHexValuesStringToCompare(fileModel, key);
+            if (searchForAnyMatch(hexValueString)) return true;
+        }
+        return false;
+    }
+
+    private boolean searchForAnyMatch(String hexValueString) {
+        for (String[] arr : magicNumbers.values()) {
+            for (String magicNumber : arr) {
+                if (hexValueString.equals(magicNumber)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     private boolean isExtensionNotTxtAndNotInMagicNumberKeys(String extension) {
         return !extension.equals("txt") && !magicNumbers.keySet().contains(extension);
@@ -54,6 +77,9 @@ public class DefaultFileExtensionDifferentiate implements FileExtensionDifferent
             bytesAmountLimit = 3;
         }
         if (extension.equals("gif")) {
+            bytesAmountLimit = 6;
+        }
+        if (extension.equals("txt")) {
             bytesAmountLimit = 6;
         }
         return bytesAmountLimit;
